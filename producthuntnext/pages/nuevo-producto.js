@@ -17,11 +17,11 @@ import validarCrearProducto from "../validacion/validarCrearProducto";
 
 export default function NuevoProducto() {
   const [error, guardarError] = useState(false);
+  const [imagen, guardarImagen] = useState(null);
 
   const STATE_INICIAL = {
     nombre: "",
     empresa: "",
-    imagen: "",
     url: "",
     descripcion: "",
   };
@@ -29,13 +29,28 @@ export default function NuevoProducto() {
   const { valores, errores, handleSubmit, handleChange, handleBlur } =
     useValidacion(STATE_INICIAL, validarCrearProducto, crearProducto);
 
-  const { nombre, empresa, imagen, url, descripcion } = valores;
+  const { nombre, empresa, url, descripcion } = valores;
 
   //hook de routing para redireccionar
   const router = useRouter();
 
   //context con las operaciones crud de firebase
   const { usuario, firebase } = useContext(FirebaseContext);
+
+  const handleFile = (e) => {
+    if (e.target.files[0]) {
+      console.log(e.target.files[0]);
+      guardarImagen(e.target.files[0]);
+    }
+  };
+
+  const handleUpload = async () => {
+    const uploadTask = await firebase.storage
+      .ref(`productos/${imagen.lastModified}${imagen.name}`)
+      .put(imagen);
+    const downloadURL = await uploadTask.ref.getDownloadURL();
+    return downloadURL;
+  };
 
   async function crearProducto() {
     //si el usuario no está autenticado
@@ -48,6 +63,7 @@ export default function NuevoProducto() {
       nombre,
       empresa,
       url,
+      imageUrl: await handleUpload(),
       descripcion,
       votos: 0,
       comentarios: [],
@@ -99,17 +115,17 @@ export default function NuevoProducto() {
             </Campo>
             {errores.empresa && <Error>{errores.empresa}</Error>}
 
-            {/* <Campo>
+            <Campo>
               <label htmlFor="imagen">Imagen</label>
               <input
                 type="file"
+                accept="image/*"
                 id="imagen"
                 name="imagen"
-                value={imagen}
-                onChange={handleChange}
+                onInput={(e) => handleFile(e)}
               />
             </Campo>
-            {errores.imagen && <Error>{errores.imagen}</Error>} */}
+            {errores.imagen && <Error>{errores.imagen}</Error>}
 
             <Campo>
               <label htmlFor="url">URL</label>
