@@ -31,6 +31,7 @@ const Producto = () => {
   //state del componente
   const [producto, guardarProducto] = useState({});
   const [error, guardarError] = useState(false);
+  const [comentario, guardarComentario] = useState({});
 
   //Routing para obtener el id actuar
   const router = useRouter();
@@ -54,7 +55,7 @@ const Producto = () => {
       };
       obtenerProducto();
     }
-  }, [id]);
+  }, [id, producto]);
 
   if (Object.keys(producto).length === 0) return "Cargando";
 
@@ -62,12 +63,41 @@ const Producto = () => {
     comentarios,
     creado,
     descripcion,
-    empresa,
     nombre,
     url,
     imagen,
     votos,
+    creador,
+    haVotado,
   } = producto;
+
+  //Administrar y validar los votos
+  const votarProducto = () => {
+    if (!usuario) {
+      return router.push("/");
+    }
+
+    // Verificar si el usuario actual ha votado
+    if (haVotado.includes(usuario.uid)) return;
+
+    //Obtener y sumar un nuevo voto
+    const nuevoTotal = votos + 1;
+
+    // guardar el ID del usuario que ha votado
+    const nuevoHaVotado = [...haVotado, usuario.uid];
+
+    //  Actualizar en la BD
+    firebase.db.collection("productos").doc(id).update({
+      votos: nuevoTotal,
+      haVotado: nuevoHaVotado,
+    });
+
+    // Actualizar el state
+    guardarProducto({
+      ...producto,
+      votos: nuevoTotal,
+    });
+  };
 
   return (
     <Layout>
@@ -84,18 +114,23 @@ const Producto = () => {
         <ContenedorProducto>
           <div>
             <p>
-              Publicado hace:{" "}
+              Publicado por {creador.nombre} hace:{" "}
               {formatDistanceToNow(new Date(creado), { locale: es })}{" "}
             </p>
             <img src={imagen} alt={nombre} />
             <p>{descripcion}</p>
-            <h2>Agrega tu comentario</h2>
-            <form>
-              <Campo>
-                <input type="text" name="mensaje" />
-              </Campo>
-              <InputSubmit type="submit" value="Agregar Comentario" />
-            </form>
+
+            {usuario && (
+              <>
+                <h2>Agrega tu comentario</h2>
+                <form>
+                  <Campo>
+                    <input type="text" name="mensaje" />
+                  </Campo>
+                  <InputSubmit type="submit" value="Agregar Comentario" />
+                </form>
+              </>
+            )}
 
             <h2
               css={css`
@@ -116,12 +151,13 @@ const Producto = () => {
             <Boton target="_blank" bgColor="true" href={url}>
               Visitar URL
             </Boton>
+
             <div
               css={css`
                 margin-top: 5rem;
               `}
             >
-              <Boton>Votar</Boton>
+              {usuario && <Boton onClick={votarProducto}>Votar</Boton>}
               <p
                 css={css`
                   text-align: center;
