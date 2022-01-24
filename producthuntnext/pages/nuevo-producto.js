@@ -63,7 +63,7 @@ export default function NuevoProducto() {
       nombre,
       empresa,
       url,
-      imageUrl: await handleUpload(),
+      imagen: await handleUpload(),
       descripcion,
       votos: 0,
       comentarios: [],
@@ -72,6 +72,8 @@ export default function NuevoProducto() {
 
     //insertarlo en la base de datos
     firebase.db.collection("productos").add(producto);
+
+    return router.push("/");
   }
 
   return (
