@@ -36,6 +36,7 @@ export default function NuevoProducto() {
 
   //context con las operaciones crud de firebase
   const { usuario, firebase } = useContext(FirebaseContext);
+  console.log(usuario);
 
   const handleFile = (e) => {
     if (e.target.files[0]) {
@@ -68,6 +69,10 @@ export default function NuevoProducto() {
       votos: 0,
       comentarios: [],
       creado: Date.now(),
+      creador: {
+        id: usuario.uid,
+        nombre: usuario.displayName,
+      },
     };
 
     //insertarlo en la base de datos
