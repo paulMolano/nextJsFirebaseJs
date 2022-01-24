@@ -65,7 +65,7 @@ const Header = () => {
                     margin-right: 2rem;
                   `}
                 >
-                  Hola: {usuario.displayName}
+                  {usuario.displayName.toUpperCase()}
                 </p>
 
                 <Boton bgColor onClick={() => firebase.cerrarSesion()}>
