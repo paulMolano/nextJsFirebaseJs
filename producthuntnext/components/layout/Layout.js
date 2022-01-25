@@ -64,7 +64,6 @@ const Layout = (props) => {
         `}
       />
       <Head>
-        <html lang="es" />
         <title>Product Hunt Firebase y Next.js</title>
         <link
           rel="stylesheet"
@@ -74,7 +73,7 @@ const Layout = (props) => {
           referrerpolicy="no-referrer"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
         <link
           href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap"
           rel="stylesheet"
