@@ -74,6 +74,7 @@ const Producto = () => {
     haVotado,
   } = producto;
 
+  console.log(usuario);
   //Administrar y validar los votos
   const votarProducto = () => {
     if (!usuario) {

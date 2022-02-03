@@ -43,6 +43,11 @@ const Header = () => {
             css={css`
               display: flex;
               align-items: center;
+              @media (max-width: 768px) {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+              }
             `}
           >
             <Link href="/">
