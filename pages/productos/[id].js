@@ -90,6 +90,11 @@ const Producto = () => {
     // guardar el ID del usuario que ha votado
     const nuevoHaVotado = [...haVotado, usuario.uid];
 
+    guardarProducto({
+      ...producto,
+      haVotado: nuevoHaVotado,
+    });
+
     //  Actualizar en la BD
     firebase.db.collection("productos").doc(id).update({
       votos: nuevoTotal,
