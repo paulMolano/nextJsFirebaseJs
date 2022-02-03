@@ -155,7 +155,11 @@ export default function NuevoProducto() {
                 {errores.url && <Error>{errores.url}</Error>}
               </fieldset>
 
-              <fieldset>
+              <fieldset
+                css={css`
+                  width: 100%;
+                `}
+              >
                 <legend>Sobre tu producto</legend>
                 <Campo>
                   <label htmlFor="descripcion">Descripción</label>

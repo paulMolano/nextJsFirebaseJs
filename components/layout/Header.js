@@ -25,6 +25,9 @@ const Logo = styled.a`
   font-family: "Roboto Slab", serif;
   margin-right: 2rem;
   cursor: pointer;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Header = () => {

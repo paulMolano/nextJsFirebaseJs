@@ -43,6 +43,10 @@ const Comentarios = styled.div`
     border: 1px solid #e1e1e1;
     padding: 0.3rem 1rem;
     margin-right: 2rem;
+
+    @media (max-width: 768px) {
+      border: none;
+    }
   }
   img {
     width: 2rem;
